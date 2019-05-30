@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import './Setting.dart';
 // import '../utils/Routes.dart';
 import '../widgets/Header.dart';
 import '../pages/Search.dart';
 import '../widgets/FloatActionButton.dart';
-import '../widgets/floor/FloorMulti.dart';
+// import '../widgets/floor/FloorMulti.dart';
+// import '../widgets/webview/LSWebView.dart';
+import '../widgets//webview/LSWebViewNoBar.dart';
+
+import 'package:dio/dio.dart';
+Dio dio = new Dio();
+
 
 class Home extends StatelessWidget {
   @override
@@ -35,10 +42,19 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
   TabController _tabController;
+  List lists = new List();
 
   void initState() { 
     super.initState();
-    _tabController = new TabController(vsync: this, length: 3);
+    _tabController = new TabController(vsync: this, length: 13);
+    _fetchData();
+  }
+
+  void _fetchData() async{
+    Response response = await dio.get("http://127.0.0.1:7001/api/user");
+    setState(() {
+      lists = response.data["data"];
+    });
   }
 
   @override
@@ -57,7 +73,32 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     Navigator.pop(context);
   }
 
+  List<Widget> _getTabs() {
+    List<Widget> res = new List();
+    for (var item in lists) {
+      if (item['enabled']) {
+        res.add(new Tab(text: item['label']));
+      }
+    }
+    return res;
+  }
+
+  List<Widget> _getTabBarView() {
+    List<Widget> res = new List();
+    for (var item in lists) {
+      if (item['enabled']) {
+        res.add(new Center(
+          child: new LSWebViewNoBar(
+          url: item['url']
+        )));
+      }
+    }
+    return res;
+  }
+
   void _getMoreTap() {
+    _fetchData();
+    return;
     showDialog<Null>(
       context: context,
       barrierDismissible: false,
@@ -117,19 +158,18 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 Container(
                   width: MediaQuery.of(context).size.width - 40,
                   child: TabBar(
+                    labelStyle: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+                    unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
                     labelColor: Color(0xffde4b4b),
-                    // unselectedLabelStyle: TextStyle(
-                    //   fontSize: 12,
-                    //   color: Color(0xff999999),
-                    // ),
                     unselectedLabelColor: Color(0xff999999),
                     indicatorColor: Color(0xffde4b4b),
                     isScrollable: true,
-                    tabs: <Widget>[
-                      new Tab(text: "推荐",),
-                      new Tab(text: "前端"),
-                      new Tab(text: "后端"),
-                    ],
+                    tabs: _getTabs(),
+                    // <Widget>[
+                    //   new Tab(text: "推荐",),
+                    //   new Tab(text: "前端"),
+                    //   new Tab(text: "后端"),
+                    // ],
                     controller: _tabController,
                   ),
                 ),
@@ -155,240 +195,19 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       ),
       body: new TabBarView(
         controller: _tabController,
-        children: <Widget>[
-          SafeArea(
-            child: ListView(
-              children: <Widget>[
-                FloorMultiWidget(
-                  linkTo: (Map<String, dynamic> data) {
-                    print(data);
-                  },
-                  list: [{
-                    "flex": 1,
-                    // "url": 'http://temp.im/1125x345/eee/ccc'
-                    "url": "http://localhost:1234/5ad1e648799a5a85.1018e2db.gif"
-                  }],
-                ),
-                FloorMultiWidget(
-                  linkTo: (Map<String, dynamic> data) {
-                    print(data);
-                  },
-                  list: [{
-                    "flex": 2,
-                    // "url": 'http://temp.im/561x360/eec/ccc'
-                    "url": "http://localhost:1234/001.9c0161ba.jpg"
-                  }, {
-                    "flex": 1,
-                    // "url": 'http://temp.im/279x360/eec/ccc'
-                    "url": "http://localhost:1234/002.39df02f2.jpg"
-                  }, {
-                    "flex": 1,
-                    // "url": 'http://temp.im/279x360/eec/ccc'
-                    "url": "http://localhost:1234/003.6d591184.jpg"
-                  }],
-                ),
-                FloorMultiWidget(
-                  linkTo: (Map<String, dynamic> data) {
-                    print(data);
-                  },
-                  list: [{
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/004.fc7b6682.jpg"
-                  }, {
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/005.19faff92.jpg"
-                  }],
-                ),
-                FloorMultiWidget(
-                  linkTo: (Map<String, dynamic> data) {
-                    print(data);
-                  },
-                  list: [{
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/004.fc7b6682.jpg"
-                  }, {
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/005.19faff92.jpg"
-                  }],
-                ),
-                FloorMultiWidget(
-                  linkTo: (Map<String, dynamic> data) {
-                    print(data);
-                  },
-                  list: [{
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/004.fc7b6682.jpg"
-                  }, {
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/005.19faff92.jpg"
-                  }],
-                ),
-                FloorMultiWidget(
-                  linkTo: (Map<String, dynamic> data) {
-                    print(data);
-                  },
-                  list: [{
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/004.fc7b6682.jpg"
-                  }, {
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/005.19faff92.jpg"
-                  }],
-                ),
-                FloorMultiWidget(
-                  linkTo: (Map<String, dynamic> data) {
-                    print(data);
-                  },
-                  list: [{
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/004.fc7b6682.jpg"
-                  }, {
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/005.19faff92.jpg"
-                  }],
-                ),
-                FloorMultiWidget(
-                  linkTo: (Map<String, dynamic> data) {
-                    print(data);
-                  },
-                  list: [{
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/004.fc7b6682.jpg"
-                  }, {
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/005.19faff92.jpg"
-                  }],
-                ),
-                FloorMultiWidget(
-                  linkTo: (Map<String, dynamic> data) {
-                    print(data);
-                  },
-                  list: [{
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/004.fc7b6682.jpg"
-                  }, {
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/005.19faff92.jpg"
-                  }],
-                ),
-                FloorMultiWidget(
-                  linkTo: (Map<String, dynamic> data) {
-                    print(data);
-                  },
-                  list: [{
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/004.fc7b6682.jpg"
-                  }, {
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/005.19faff92.jpg"
-                  }],
-                ),
-                FloorMultiWidget(
-                  linkTo: (Map<String, dynamic> data) {
-                    print(data);
-                  },
-                  list: [{
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/004.fc7b6682.jpg"
-                  }, {
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/005.19faff92.jpg"
-                  }],
-                ),
-                FloorMultiWidget(
-                  linkTo: (Map<String, dynamic> data) {
-                    print(data);
-                  },
-                  list: [{
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/004.fc7b6682.jpg"
-                  }, {
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/005.19faff92.jpg"
-                  }],
-                ),
-                FloorMultiWidget(
-                  linkTo: (Map<String, dynamic> data) {
-                    print(data);
-                  },
-                  list: [{
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/004.fc7b6682.jpg"
-                  }, {
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/005.19faff92.jpg"
-                  }],
-                ),
-                FloorMultiWidget(
-                  linkTo: (Map<String, dynamic> data) {
-                    print(data);
-                  },
-                  list: [{
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/004.fc7b6682.jpg"
-                  }, {
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/005.19faff92.jpg"
-                  }],
-                ),
-                FloorMultiWidget(
-                  linkTo: (Map<String, dynamic> data) {
-                    print(data);
-                  },
-                  list: [{
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/004.fc7b6682.jpg"
-                  }, {
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/005.19faff92.jpg"
-                  }],
-                ),
-                FloorMultiWidget(
-                  linkTo: (Map<String, dynamic> data) {
-                    print(data);
-                  },
-                  list: [{
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/004.fc7b6682.jpg"
-                  }, {
-                    "flex": 1,
-                    // "url": 'http://temp.im/372x372/eef/ccc'
-                    "url": "http://localhost:1234/005.19faff92.jpg"
-                  }],
-                ),
-              ],
-            ),
-          ),
-          new Center(child: new Text('船')),
-          new Center(child: new Text('巴士')),
-        ],
+        children: _getTabBarView(),
+          // _getTabBarView()
+          // <Widget>[
+          // new Center(child: new LSWebViewNoBar(
+          //   url: 'http://127.0.0.1:8080/recommend.html'
+          // )),
+          // new Center(child: new LSWebViewNoBar(
+          //   url: 'http://127.0.0.1:8080/detail.html'
+          // )),
+          // new Center(child: new LSWebViewNoBar(
+          //   url: 'http://127.0.0.1:8080/index.html'
+          // )),
+          // ],
       ),
       floatingActionButton: FloatActionButtonWidget(),
     );

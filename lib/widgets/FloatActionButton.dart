@@ -49,7 +49,9 @@ class _FloatActionButtonWidgetState extends State<FloatActionButtonWidget> {
             backgroundColor: Colors.blueAccent,
             mini: true,
             child: Icon(Icons.settings),
-            onPressed: () {},
+            onPressed: () {
+              // throw new StateError('This is a Dart exception.');
+            },
         )));
 
     return UnicornDialer(

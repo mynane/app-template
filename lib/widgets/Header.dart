@@ -41,9 +41,9 @@ class HeaderWidget extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(right: 6),
                 child: Icon(
-                  FontAwesomeIcons.search,
-                  size: 14.0,
-                  color: Color(0xff999999),
+                  Icons.search,
+                  size: 20.0,
+                  color: Color(0xffcccccc),
                 ),
               ),
               Text(
@@ -51,6 +51,7 @@ class HeaderWidget extends StatelessWidget {
                 style: TextStyle(
                   color: Color(0xff999999),
                   fontSize: 14,
+                  fontWeight: FontWeight.w100,
                 )
               ),
             ],
