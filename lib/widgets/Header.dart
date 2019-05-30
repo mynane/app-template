@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // import '../pages/Search.dart';
-// import '../pages/WebView.dart';
-import '../pages/Animate.dart';
+import '../pages/WebView.dart';
+// import '../pages/Animate.dart';
 // import '../pages/Sliver.dart';
 
 class HeaderWidget extends StatelessWidget {
@@ -13,8 +13,8 @@ class HeaderWidget extends StatelessWidget {
     void _goSearchPage() {
       Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
         // return new SearchPage();
-        // return new WebViewPage();
-        return StaggeredAnimationReplication();
+        return new WebViewPage();
+        // return StaggeredAnimationReplication();
         // return new SliverPage();
       }));
     }

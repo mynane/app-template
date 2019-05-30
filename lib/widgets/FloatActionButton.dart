@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:unicorndial/unicorndial.dart';
+import './webview/LSWebView.dart';
 
 class FloatActionButtonWidget extends StatefulWidget {
   FloatActionButtonWidget({Key key}) : super(key: key);
@@ -8,6 +9,11 @@ class FloatActionButtonWidget extends StatefulWidget {
 }
 
 class _FloatActionButtonWidgetState extends State<FloatActionButtonWidget> {
+  void _goLSWebView() {
+    Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+      return new LSWebView();
+    }));
+  }
   @override
   Widget build(BuildContext context) {
     var childButtons = List<UnicornButton>();
@@ -19,7 +25,9 @@ class _FloatActionButtonWidgetState extends State<FloatActionButtonWidget> {
           backgroundColor: Colors.redAccent,
           mini: true,
           child: Icon(Icons.hotel),
-          onPressed: () {},
+          onPressed: () {
+            _goLSWebView();
+          },
         )));
 
     childButtons.add(UnicornButton(

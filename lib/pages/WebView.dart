@@ -10,7 +10,6 @@ class WebViewPage extends StatefulWidget {
 }
 
 class _WebViewPageState extends State<WebViewPage> {
-
   @override
   Widget build(BuildContext context) {
     return Container(
