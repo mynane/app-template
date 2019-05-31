@@ -2,46 +2,78 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:convert';
+import 'dart:async';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class LSWebView extends StatefulWidget {
+class LSWebViewLocalNoBar extends StatefulWidget {
+  final String url;
+  LSWebViewLocalNoBar({Key key, this.url}) : super(key: key);
+
   @override
-  _LSWebViewState createState() => _LSWebViewState();
+  _LSWebViewLocalNoBarState createState() => _LSWebViewLocalNoBarState();
 }
 
-class _LSWebViewState extends State<LSWebView> {
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+class _LSWebViewLocalNoBarState extends State<LSWebViewLocalNoBar> {
+  final Completer<WebViewController> _controller = Completer<WebViewController>();
   WebViewController _webViewController;
   String title = '';
-  num _stackToView = 1;
+  num _stackToView = 0;
+  Timer timer;
+
+  void _setTimer() {
+    if (timer != null) {
+      _clearTimer();
+    }
+    timer = Timer.periodic(
+      const Duration(milliseconds: 8000), (a) {
+        if (_stackToView == 1) {
+          print('Duration timeout');
+          setState(() {
+            _stackToView = 2;
+          });
+          throw FlutterError("url:${widget.url}, timeout");
+        }
+        _clearTimer();
+      }
+    );
+  }
+
+  void _clearTimer() {
+    print("clear timer");
+    timer?.cancel();
+    timer = null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _clearTimer();
+  }
+
   void _handleLoad() {
     setState(() {
       _stackToView = 0;
     });
   }
 
+  void _loadHtmlFromAssets() async {
+    String fileHtmlContents = await rootBundle.loadString(widget.url);
+    _webViewController.loadUrl(Uri.dataFromString(fileHtmlContents,
+            mimeType: 'text/html', encoding: Encoding.getByName('utf-8'))
+        .toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        actions: <Widget>[
-          // NavigationControls(_controller.future),
-          SampleMenu(_controller.future),
-        ],
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xffe64646), Color(0xFFe43130)]),
-          ),
-        ),
-      ),
-      // We're using a Builder here so we have a context that is below the Scaffold
-      // to allow calling Scaffold.of(context) so we can show a snackbar.
       body: Builder(builder: (BuildContext context) {
         return IndexedStack(
           index: _stackToView,
@@ -50,11 +82,12 @@ class _LSWebViewState extends State<LSWebView> {
               children: < Widget > [
                 Expanded(
                   child: WebView(
-                    initialUrl: 'http://127.0.0.1:8080/detail.html',
+                    initialUrl: '', // 'http://127.0.0.1:8080/detail.html',
                     javascriptMode: JavascriptMode.unrestricted,
                     onWebViewCreated: (WebViewController webViewController) {
                       _controller.complete(webViewController);
                       _webViewController = webViewController;
+                      _loadHtmlFromAssets();
                     },
                     javascriptChannels: <JavascriptChannel>[
                       _toasterJavascriptChannel(context),
@@ -65,12 +98,15 @@ class _LSWebViewState extends State<LSWebView> {
                       //   print('blocking navigation to $request}');
                       //   return NavigationDecision.prevent;
                       // }
-                      setState(() {
-                        _stackToView = 1;
-                      });
+                      print("navigationDelegate start timer");
+                      _setTimer();
+                      // setState(() {
+                      //   _stackToView = 1;
+                      // });
                       return NavigationDecision.navigate;
                     },
                     onPageFinished: (String url) {
+                      _clearTimer();
                       print('Page finished loading: $url');
                       _handleLoad();
                     },
@@ -78,14 +114,26 @@ class _LSWebViewState extends State<LSWebView> {
                 ),
               ],
             ),
-            Container(
-              color: Colors.white,
+            Opacity(
+              opacity: 0.4,
               child: Center(
                 child: Image(
                   image: AssetImage("lib/images/loading02.jpg"),
                   width: 160,
                 ),
                 // CircularProgressIndicator(),
+              ),
+            ),
+             Container(
+              color: Colors.white,
+              child: InkWell(
+                onTap: () {
+                  print("object");
+                  _webViewController.loadUrl(widget.url);
+                },
+                child: Center(
+                  child: Text("点击空白区域刷新", style: TextStyle(color: Color(0x99999999)),)
+                )
               ),
             ),
           ],
@@ -114,6 +162,12 @@ class _LSWebViewState extends State<LSWebView> {
             case 'setTitle':
               setState(() {
                 title = parsed['data'];
+              });
+            break;
+            case 'loading':
+              
+              setState(() {
+                _stackToView = 1;
               });
             break;
             case 'goto':

@@ -1,0 +1,21 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript">
+        function add(num1, num2) {
+            var result = num1 + num2;
+            document.getElementById("result").innerHTML
+                = num1 + " + " + num2 + " = " + result;
+        }
+    </script>
+</head>
+<body>
+    <p onclick="loading()">Hello from Flutter</p>
+    <p id="result"></p>
+    <script>
+      function loading() {
+        JSBridge.postMessage(JSON.stringify('{"type": "loading"}'))
+      }
+    </script>
+</body>
+</html>

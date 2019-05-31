@@ -47,7 +47,7 @@ class HeaderWidget extends StatelessWidget {
                 ),
               ),
               Text(
-                "搜索饿了么商家、商品名称",
+                "搜索文章",
                 style: TextStyle(
                   color: Color(0xff999999),
                   fontSize: 14,

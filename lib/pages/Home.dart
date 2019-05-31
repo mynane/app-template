@@ -8,6 +8,7 @@ import '../widgets/FloatActionButton.dart';
 // import '../widgets/floor/FloorMulti.dart';
 // import '../widgets/webview/LSWebView.dart';
 import '../widgets//webview/LSWebViewNoBar.dart';
+import '../widgets//webview/LSWebViewLocalNoBar.dart';
 
 import 'package:dio/dio.dart';
 Dio dio = new Dio();
@@ -75,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   List<Widget> _getTabs() {
     List<Widget> res = new List();
+    res.add(new Tab(text: '首页'));
     for (var item in lists) {
       if (item['enabled']) {
         res.add(new Tab(text: item['label']));
@@ -85,6 +87,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   List<Widget> _getTabBarView() {
     List<Widget> res = new List();
+    res.add(new Center(
+      child: new LSWebViewLocalNoBar(
+        url: 'lib/htmls/index.html',
+      ),
+    ));
     for (var item in lists) {
       if (item['enabled']) {
         res.add(new Center(
@@ -165,11 +172,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     indicatorColor: Color(0xffde4b4b),
                     isScrollable: true,
                     tabs: _getTabs(),
-                    // <Widget>[
-                    //   new Tab(text: "推荐",),
-                    //   new Tab(text: "前端"),
-                    //   new Tab(text: "后端"),
-                    // ],
                     controller: _tabController,
                   ),
                 ),
@@ -177,7 +179,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   onTap: _getMoreTap,
                   child: Container(
                     width: 40,
-                    // padding: EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
                       border: Border(left: BorderSide(color: Color(0x99999999), width: 1)),
                     ),
@@ -196,18 +197,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       body: new TabBarView(
         controller: _tabController,
         children: _getTabBarView(),
-          // _getTabBarView()
-          // <Widget>[
-          // new Center(child: new LSWebViewNoBar(
-          //   url: 'http://127.0.0.1:8080/recommend.html'
-          // )),
-          // new Center(child: new LSWebViewNoBar(
-          //   url: 'http://127.0.0.1:8080/detail.html'
-          // )),
-          // new Center(child: new LSWebViewNoBar(
-          //   url: 'http://127.0.0.1:8080/index.html'
-          // )),
-          // ],
       ),
       floatingActionButton: FloatActionButtonWidget(),
     );
