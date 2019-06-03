@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:unicorndial/unicorndial.dart';
 import './webview/LSWebView.dart';
 import '../utils/DownloadFile.dart';
+import '../pages/Sliver.dart';
 
 var downloadFile = DownloadFile();
 
@@ -42,7 +43,12 @@ class _FloatActionButtonWidgetState extends State<FloatActionButtonWidget> {
             mini: true,
             child: Icon(Icons.home),
             onPressed: () {
-              downloadFile.load('http://127.0.0.1:8080/detail.html');
+              Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+                // return new SearchPage();
+                return new SliverPage();
+                // return StaggeredAnimationReplication();
+                // return new SliverPage();
+              }));
             },
         )));
 

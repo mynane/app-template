@@ -17,8 +17,7 @@ Dio dio = new Dio();
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return 
-    MaterialApp(
+    return MaterialApp(
       title: 'flutter demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -27,7 +26,6 @@ class Home extends StatelessWidget {
       routes: <String, WidgetBuilder> {
         '/router/setting': (_) => new SettingPage(),
         '/puter/search': (_) => new SearchPage(),
-        // '/puter/sliver': (_) => new SliverPage(),
       },
     );
   }

@@ -10,7 +10,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class LSWebViewLocalNoBar extends StatefulWidget {
   final String url;
-  LSWebViewLocalNoBar({Key key, this.url}) : super(key: key);
+  final changeHeight;
+  LSWebViewLocalNoBar({Key key, this.url, this.changeHeight}) : super(key: key);
 
   @override
   _LSWebViewLocalNoBarState createState() => _LSWebViewLocalNoBarState();
@@ -165,10 +166,12 @@ class _LSWebViewLocalNoBarState extends State<LSWebViewLocalNoBar> {
               });
             break;
             case 'loading':
-              
               setState(() {
                 _stackToView = 1;
               });
+            break;
+            case 'changeHeight':
+              widget.changeHeight(parsed['height']);
             break;
             case 'goto':
               _webViewController.loadUrl(parsed['data']);
