@@ -32,21 +32,49 @@
         color: #666;
         font-size: 12px;
         text-align: center;
-        background: -moz-linear-gradient(top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%); /* FF3.6-15 */
-background: -webkit-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* Chrome10-25,Safari5.1-6 */
-background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
       }
     </style>
 </head>
 <body>
     <div class="border tip">欢迎来到开心中文网</div>
+    <div style="text-align:center"> 
+      <button onclick="playPause()">播放/暂停</button> 
+      <button onclick="makeBig()">放大</button>
+      <button onclick="makeSmall()">缩小</button>
+      <button onclick="makeNormal()">普通</button>
+      <br> 
+      <video id="video1" width="420">
+        <source src="https://www.runoob.com/try/demo_source/mov_bbb.mp4" type="video/mp4">
+        您的浏览器不支持 HTML5 video 标签。
+      </video>
+    </div> 
     <script>
       function loading() {
-        JSBridge.postMessage(JSON.stringify('{"type": "loading"}'))
+        JSBridge.postMessage(JSON.stringify('{"type": "loading"}'));
       }
       $(function() {
-        JSBridge.postMessage(JSON.stringify({"type": "changeHeight", "height": `${$(document).height()}`}))
+        JSBridge.postMessage(JSON.stringify({"type": "changeHeight", "height": `${$(document).height()}`}));
       })
+      var myVideo=document.getElementById("video1"); 
+
+          function playPause() { 
+            if (myVideo.paused) 
+              myVideo.play(); 
+            else 
+              myVideo.pause(); 
+          } 
+
+          function makeBig() { 
+            myVideo.width=560; 
+          } 
+
+          function makeSmall() { 
+            myVideo.width=320; 
+          } 
+
+          function makeNormal() { 
+            myVideo.width=420; 
+          } 
     </script>
 </body>
 </html>
