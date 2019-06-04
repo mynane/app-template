@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     List<Widget> res = new List();
     res.add(new Center(
       child: new LSWebViewLocalNoBar(
-        url: 'lib/htmls/index.html',
+        url: 'lib/htmls/home.html',
       ),
     ));
     for (var item in lists) {
@@ -153,19 +153,18 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [Color(0xffe64646), Color(0xFFe43130)]),
+              colors: [Color(0xffe64646), Color(0xffe43130)]),
           ),
         ),
         bottom: PreferredSize(
           child: Container(
             height: 40,
-            width: double.infinity,
             color: Colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(
-                  width: MediaQuery.of(context).size.width - 40,
+                  width: MediaQuery.of(context).size.width,
                   child: TabBar(
                     labelStyle: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                     unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
@@ -177,19 +176,19 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     controller: _tabController,
                   ),
                 ),
-                InkWell(
-                  onTap: _getMoreTap,
-                  child: Container(
-                    width: 40,
-                    decoration: BoxDecoration(
-                      border: Border(left: BorderSide(color: Color(0x99999999), width: 1)),
-                    ),
-                    child: Icon(
-                      Icons.add,
-                      color: Color(0x99666666),
-                    ),
-                  ),
-                ),
+                // InkWell(
+                //   onTap: _getMoreTap,
+                //   child: Container(
+                //     width: 40,
+                //     decoration: BoxDecoration(
+                //       border: Border(left: BorderSide(color: Color(0x99999999), width: 1)),
+                //     ),
+                //     child: Icon(
+                //       Icons.add,
+                //       color: Color(0x99666666),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

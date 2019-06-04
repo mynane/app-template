@@ -1,9 +1,13 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import '../widgets/webview/LSWebViewLocalNoBar.dart';
+import './Home.dart';
+
+Dio dio = new Dio();
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverAppBarDelegate({
@@ -44,23 +48,76 @@ class SliverPage extends StatefulWidget {
 }
 
 class _SliverPageState extends State<SliverPage> {
-  double webviewHeight = 100;
+  double webviewHeight = 0;
+  List lists = new List();
   Timer timer;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _fetchData();
+  }
 
-    // timer = Timer.periodic(
-    //   const Duration(milliseconds: 8000), (a) {
-    //     setState(() {
-    //       webviewHeight = 1000;
-    //     });
-    //     timer.cancel();
-    //     timer = null;
-    //   }
-    // );
+  void _fetchData() async{
+    Response response = await dio.get("http://127.0.0.1:7001/api/navigator");
+    setState(() {
+      lists = response.data["data"];
+    });
+  }
+
+  void _goJumpTo() {
+    Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+      // return new SearchPage();
+      return new Home();
+      // return StaggeredAnimationReplication();
+      // return new SliverPage();
+    }));
+  }
+
+  Widget _row(url, label) {
+    return InkWell(
+      onTap: () => {
+        _goJumpTo()
+      },
+      child: Column(
+        children: <Widget>[
+          new Image(image: new NetworkImage(url), width: 70, height: 70,),
+          Center(child: Text(label),)
+        ],
+      ),
+    );
+  }
+
+  Widget _renderNavigator() {
+    List<Widget> row1 = new List();
+    List<Widget> row2 = new List();
+    int i = 0;
+    lists.forEach((k) {
+      if (k["enabled"]) {
+        if (i < 5) {
+          row1.add(_row(k["url"], k["label"],));
+        } else {
+          row2.add(_row(k["url"], k["label"],));
+        }
+        i++;
+      }
+    });
+    return Padding(
+      padding: EdgeInsets.only(bottom: 10),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: row1,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: row2,
+          )
+        ],
+      ),
+    );
   }
 
   @override
@@ -68,11 +125,23 @@ class _SliverPageState extends State<SliverPage> {
     //因为本路由没有使用Scaffold，为了让子级Widget(如Text)使用
     //Material Design 默认的样式风格,我们使用Material作为本路由的根。
     return Material(
+      color: Colors.white,
       child: CustomScrollView(
         slivers: <Widget>[
           //AppBar，包含一个导航栏
           SliverAppBar(
             pinned: false,
+            floating: true,
+            title: Text("分类页", style: TextStyle(
+              fontWeight: FontWeight.w300,
+              // fontSize: 12
+            )),
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xffe64646), Color(0xFFe43130)]),
+              ),
+            ),
             // expandedHeight: 250.0,
             // flexibleSpace: FlexibleSpaceBar(
             //   centerTitle: false,
@@ -90,65 +159,33 @@ class _SliverPageState extends State<SliverPage> {
           //     child: Container(),
           //   ),
           // ),
-          SliverPersistentHeader(
-            pinned: false,
-            floating: false,
-            delegate: _SliverAppBarDelegate(
-              minHeight: 0.0,
-              maxHeight: 100.0,
-              child: Container(
-                color: Colors.lightBlue[100 * (2 % 9)],
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: Center(child: Text("data")),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Center(child: Text("data")),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Center(child: Text("data")),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: Center(child: Text("data")),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Center(child: Text("data")),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Center(child: Text("data")),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
+          // SliverPersistentHeader(
+          //   pinned: false,
+          //   floating: false,
+          //   delegate: _SliverAppBarDelegate(
+          //     minHeight: 0.0,
+          //     maxHeight: 200.0,
+          //     child: Container(
+          //       color: Colors.white,
+          //       child: _renderNavigator(),
+          //     ),
+          //   ),
+          // ),
+          SliverToBoxAdapter(
+            child: Container(
+              color: Colors.white,
+              child: _renderNavigator(),
             ),
           ),
           SliverToBoxAdapter(
             child: new Container(
               height: webviewHeight,
-              // margin: EdgeInsets.only(bottom: 20),
               child: LSWebViewLocalNoBar(
                 url: "lib/htmls/index.html",
                 changeHeight: (height) {
                   setState(() {
                     print("setstate $height ${window.physicalSize} ${MediaQuery.of(context).size}");
-                    webviewHeight = double.parse(height) + MediaQuery.of(context).padding.top - 20;
+                    webviewHeight = double.parse(height) + MediaQuery.of(context).padding.top + MediaQuery.of(context).padding.bottom;
                   });
                 }
               ),

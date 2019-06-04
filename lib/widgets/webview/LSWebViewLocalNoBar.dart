@@ -133,7 +133,12 @@ class _LSWebViewLocalNoBarState extends State<LSWebViewLocalNoBar> {
                   _webViewController.loadUrl(widget.url);
                 },
                 child: Center(
-                  child: Text("点击空白区域刷新", style: TextStyle(color: Color(0x99999999)),)
+                  child: Column(
+                    children: <Widget>[
+                      Image.asset('lib/images/placeholder.png', width: 100, height: 100,),
+                      Text("点击空白区域刷新", style: TextStyle(color: Color(0x99999999)),)
+                    ],
+                  )
                 )
               ),
             ),
