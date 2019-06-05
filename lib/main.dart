@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:isolate';
-
+import 'package:fluro/fluro.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sentry/sentry.dart';
 import './pages/Home.dart';
+import './utils/Routes.dart';
+
 
 final SentryClient _sentry = new SentryClient(dsn: "http://b678d33cca0d41c48257309a81f27058@106.12.86.67:9000/4");
 
@@ -25,6 +27,10 @@ Future<Null> _reportError(dynamic error, dynamic stackTrace) async {
 }
 
 dynamic main() async {
+  ///初始化并配置路由
+  final router = new Router();
+  Routes.configureRoutes(router);
+
   FlutterError.onError = (FlutterErrorDetails details) async {
     print('FlutterError.onError caught an error');
     await _reportError(details.exception, details.stack);
@@ -38,7 +44,9 @@ dynamic main() async {
     );
   }).sendPort);
   runZoned<Future<Null>>(() async {
-    runApp(Home());
+    runApp(Home(
+      onGenerateRoute: Routes.router.generator
+    ));
   }, onError: (error, stackTrace) async {
     print('Zone caught an error');
     await _reportError(error, stackTrace);

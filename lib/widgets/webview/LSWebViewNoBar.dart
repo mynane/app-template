@@ -122,8 +122,20 @@ class _LSWebViewNoBarState extends State<LSWebViewNoBar> {
                   print("object");
                   _webViewController.loadUrl(widget.url);
                 },
-                child: Center(
-                  child: Text("点击空白区域刷新", style: TextStyle(color: Color(0x99999999)),)
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.only(top: 100),
+                  child: Center(
+                    child: Column(
+                      children: <Widget>[
+                        Image(
+                          image: AssetImage("lib/images/placeholder.png"),
+                          width: 160,
+                        ),
+                        Text("点击空白区域刷新", style: TextStyle(color: Color(0x99999999)),)
+                      ],
+                    )
+                  ),
                 )
               ),
             ),

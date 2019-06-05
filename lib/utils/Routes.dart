@@ -1,29 +1,20 @@
 import 'package:fluro/fluro.dart';
-import '../pages/Setting.dart';
-import '../pages/Search.dart';
-import '../pages/Home.dart';
+import '../pages/Animate.dart';
+import '../pages/Detail.dart';
 
 class Routes {
   static Router router;
-  static String home = '/';
-  static String setting = '/setting';
-  static String search = '/search';
+  static String animatePage = '/animate';
+  static String detailPage = '/detail';
 
   static void configureRoutes(Router router) {
-    router.define(home, handler: Handler(handlerFunc: (context, params) {
-      return new Home();
-    }));
-
-    router.define(setting, handler: Handler(handlerFunc: (context, params) {
-      return new SettingPage();
-    }));
-
-    router.define(search, handler: Handler(handlerFunc: (context, params) {
-      return new SearchPage();
-    }));
-
-    print(Routes);
-
+    router.define(
+        animatePage, handler: Handler(handlerFunc: (context, params) => StaggeredAnimationReplication()));
+    router.define(
+        detailPage, handler: Handler(handlerFunc: (context, params) {
+      // var message = params['message']?.first; //取出传参
+      return DetailPage();
+    }), transitionType: TransitionType.inFromBottom);
     Routes.router = router;
   }
 }

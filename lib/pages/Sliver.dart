@@ -50,21 +50,57 @@ class SliverPage extends StatefulWidget {
 class _SliverPageState extends State<SliverPage> {
   double webviewHeight = 0;
   List lists = new List();
-  Timer timer;
+  Color _color = Colors.black;
+  int index = 0;
+  ScrollController _scrollController = ScrollController();
+  // Timer timer;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _fetchData();
+    // timer = Timer.periodic(
+    //   const Duration(milliseconds: 2000), (a) {
+    //     // print(a.tick);
+    //     setState(() {
+    //       index += 1;
+    //     });
+    //   }
+    // );
+
+    _scrollController.addListener(() {
+      print(_scrollController.offset);
+      if (_scrollController.offset > 100) {
+        if (_color != Colors.amberAccent) {
+          setState(() {
+            _color = Colors.amberAccent;
+          });
+        }
+      } else {
+        if (_color != Colors.black) {
+          setState(() {
+            _color = Colors.black;
+          });
+        }
+      }
+    });
+    // _fetchData();
   }
 
-  void _fetchData() async{
-    Response response = await dio.get("http://127.0.0.1:7001/api/navigator");
-    setState(() {
-      lists = response.data["data"];
-    });
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _scrollController.dispose();
+    // timer.cancel();
   }
+
+  // void _fetchData() async{
+  //   Response response = await dio.get("http://127.0.0.1:7001/api/navigator");
+  //   setState(() {
+  //     lists = response.data["data"];
+  //   });
+  // }
 
   void _goJumpTo() {
     Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
@@ -127,16 +163,18 @@ class _SliverPageState extends State<SliverPage> {
     return Material(
       color: Colors.white,
       child: CustomScrollView(
+        controller: _scrollController,
         slivers: <Widget>[
           //AppBar，包含一个导航栏
           SliverAppBar(
-            pinned: false,
+            pinned: true,
             floating: true,
             title: Text("分类页", style: TextStyle(
               fontWeight: FontWeight.w300,
               // fontSize: 12
             )),
             flexibleSpace: Container(
+              // color: _color,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [Color(0xffe64646), Color(0xFFe43130)]),
@@ -151,19 +189,10 @@ class _SliverPageState extends State<SliverPage> {
             // ),
           ),
           // SliverPersistentHeader(
-          //   pinned: true,
-          //   floating: true,
-          //   delegate: SliverAppBarDelegate(
-          //     minHeight: 60.0,
-          //     maxHeight: 180.0,
-          //     child: Container(),
-          //   ),
-          // ),
-          // SliverPersistentHeader(
           //   pinned: false,
           //   floating: false,
           //   delegate: _SliverAppBarDelegate(
-          //     minHeight: 0.0,
+          //     minHeight: 60.0,
           //     maxHeight: 200.0,
           //     child: Container(
           //       color: Colors.white,
@@ -182,6 +211,12 @@ class _SliverPageState extends State<SliverPage> {
               height: webviewHeight,
               child: LSWebViewLocalNoBar(
                 url: "lib/htmls/index.html",
+                initialization: (initData) {
+                  setState(() {
+                    lists = initData["navigator"];
+                  });
+                  print(initData);
+                },
                 changeHeight: (height) {
                   setState(() {
                     print("setstate $height ${window.physicalSize} ${MediaQuery.of(context).size}");

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import './Setting.dart';
-// import '../utils/Routes.dart';
 import '../widgets/Header.dart';
 import '../pages/Search.dart';
 import '../widgets/FloatActionButton.dart';
@@ -9,26 +8,30 @@ import '../widgets/FloatActionButton.dart';
 // import '../widgets/webview/LSWebView.dart';
 import '../widgets//webview/LSWebViewNoBar.dart';
 import '../widgets//webview/LSWebViewLocalNoBar.dart';
-
 import 'package:dio/dio.dart';
+
 Dio dio = new Dio();
 
-
 class Home extends StatelessWidget {
+  final onGenerateRoute;
+  Home({Key key, this.onGenerateRoute});
+
   @override
   Widget build(BuildContext context) {
     return 
     MaterialApp(
       title: 'flutter demo',
+      onGenerateRoute: this.onGenerateRoute,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
-      routes: <String, WidgetBuilder> {
-        '/router/setting': (_) => new SettingPage(),
-        '/puter/search': (_) => new SearchPage(),
-        // '/puter/sliver': (_) => new SliverPage(),
-      },
+      // routes: this.onGenerateRoute,
+      // <String, WidgetBuilder> {
+      //   '/router/setting': (_) => new SettingPage(),
+      //   '/puter/search': (_) => new SearchPage(),
+      //   // '/puter/sliver': (_) => new SliverPage(),
+      // },
     );
   }
 }

@@ -11,7 +11,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 class LSWebViewLocalNoBar extends StatefulWidget {
   final String url;
   final changeHeight;
-  LSWebViewLocalNoBar({Key key, this.url, this.changeHeight}) : super(key: key);
+  final initialization;
+  LSWebViewLocalNoBar({Key key, this.url, this.changeHeight, this.initialization}) : super(key: key);
 
   @override
   _LSWebViewLocalNoBarState createState() => _LSWebViewLocalNoBarState();
@@ -135,7 +136,10 @@ class _LSWebViewLocalNoBarState extends State<LSWebViewLocalNoBar> {
                 child: Center(
                   child: Column(
                     children: <Widget>[
-                      Image.asset('lib/images/placeholder.png', width: 100, height: 100,),
+                      Image(
+                        image: AssetImage("lib/images/placeholder.png"),
+                        width: 160,
+                      ),
                       Text("点击空白区域刷新", style: TextStyle(color: Color(0x99999999)),)
                     ],
                   )
@@ -165,6 +169,9 @@ class _LSWebViewLocalNoBarState extends State<LSWebViewLocalNoBar> {
         onMessageReceived: (JavascriptMessage message) {
           final parsed = json.decode(message.message);
           switch (parsed['type']) {
+            case 'initialization':
+              widget.initialization(parsed["data"]);
+            break;
             case 'setTitle':
               setState(() {
                 title = parsed['data'];

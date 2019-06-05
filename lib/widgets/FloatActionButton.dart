@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+// import 'package:my_app/utils/Routes.dart';
 import 'package:unicorndial/unicorndial.dart';
 import './webview/LSWebView.dart';
 import '../utils/DownloadFile.dart';
 import '../pages/Sliver.dart';
+// import '../pages/Detail.dart';
+import '../utils/Routes.dart';
+import 'package:fluro/fluro.dart';
 
 var downloadFile = DownloadFile();
 
@@ -61,7 +67,14 @@ class _FloatActionButtonWidgetState extends State<FloatActionButtonWidget> {
             mini: true,
             child: Icon(Icons.settings),
             onPressed: () {
+              // Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+              //   // return new SearchPage();
+              //   return new DetailPage();
+              //   // return StaggeredAnimationReplication();
+              //   // return new SliverPage();
+              // }));
               // throw new StateError('This is a Dart exception.');
+              intentTo(context);
             },
         )));
 
@@ -74,3 +87,18 @@ class _FloatActionButtonWidgetState extends State<FloatActionButtonWidget> {
     );
   }
 }
+
+///跳转到第二个界面
+intentTo(BuildContext context) {
+  ///字符串编码
+  var json = jsonEncode(Utf8Encoder().convert('来自第一个界面'));
+  Routes.router.navigateTo(
+      context, '${Routes.detailPage}?message=$json', //跳转路径
+  ).then((result) {//回传值
+    if (result != null) {
+      print(result);
+    }
+  });
+  // Routes.router.pop(context);
+}
+
