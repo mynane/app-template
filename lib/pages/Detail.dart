@@ -11,19 +11,19 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateMixin {
   TabController _tabController;
   int _currentTab = 0;
-  int _index = 0;
+  int _index = 4;
   Timer timer;
 
   @override
   void initState() {
-    timer = Timer.periodic(
-      const Duration(milliseconds: 2000), (a) {
-        // print(a.tick);
-        setState(() {
-          _index += 1;
-        });
-      }
-    );
+    // timer = Timer.periodic(
+    //   const Duration(milliseconds: 2000), (a) {
+    //     // print(a.tick);
+    //     setState(() {
+    //       _index += 1;
+    //     });
+    //   }
+    // );
     _tabController = new TabController(vsync: this, length: 13);
     _tabController.addListener(() {
       setState(() {
@@ -142,11 +142,23 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                           Padding(
                             padding: EdgeInsets.only(
                               top: 10,
-                              bottom: 10,
-                              left: 20,
-                              right: 20
+                              // bottom: 10,
+                              // left: 20,
+                              // right: 20
                             ),
-                            child: Text("data"),
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                border: Border(bottom: BorderSide(
+                                  color: Color(0xffcccccc),
+                                  width: 1
+                                ))
+                              ),
+                              child: TabBarView(
+                                controller: _tabController,
+                                children: _getTabBarView(),
+                              )
+                            ),
                           )
                         ],
                       ),
@@ -159,7 +171,7 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
             color: Colors.cyan[100 * (_index % 9)],
             width: MediaQuery.of(context).size.width,
             child: Container(
-              height: 100,
+              height: MediaQuery.of(context).size.height - 141,
               child: TabBarView(
                 controller: _tabController,
                 children: _getTabBarView(),

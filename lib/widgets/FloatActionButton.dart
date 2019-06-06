@@ -24,6 +24,7 @@ class _FloatActionButtonWidgetState extends State<FloatActionButtonWidget> {
       return new LSWebView();
     }));
   }
+
   @override
   Widget build(BuildContext context) {
     var childButtons = List<UnicornButton>();
