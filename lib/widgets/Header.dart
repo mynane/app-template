@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../pages/WebView.dart';
 // import '../pages/Animate.dart';
 // import '../pages/Sliver.dart';
+import '../configs/my_arrow_icons.dart';
 
 class HeaderWidget extends StatelessWidget {
   HeaderWidget({Key key}) : super(key: key);
@@ -41,7 +42,7 @@ class HeaderWidget extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(right: 6),
                 child: Icon(
-                  Icons.search,
+                  MyArrow.fangxiangyuan_xiangzuo,
                   size: 20.0,
                   color: Color(0xffcccccc),
                 ),

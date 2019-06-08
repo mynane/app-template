@@ -13,30 +13,15 @@ class _WebViewPageState extends State<WebViewPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-       child: WebviewScaffold(
-        url: "http://127.0.0.1:8080/index.html",
-        appBar: new AppBar(
-          // title: const Text('Widget webview'),
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xffe64646), Color(0xFFe43130)]),
-            ),
-          ),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("data"),
+          backgroundColor: Colors.white,
+          actions: <Widget>[
+            Text("data")
+          ],
         ),
-        withZoom: true,
-        enableAppScheme: true,
-        withLocalStorage: true,
-        hidden: true,
-        initialChild: Container(
-          color: Colors.white,
-          child: const Center(
-            child: Image(
-              image: AssetImage("lib/images/loading02.jpg"),
-              width: 160,
-            ),
-          ),
-        ),
+        body: Text("data"),
       ),
     );
   }

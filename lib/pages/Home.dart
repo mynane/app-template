@@ -8,6 +8,7 @@ import '../widgets/FloatActionButton.dart';
 // import '../widgets/webview/LSWebView.dart';
 import '../widgets//webview/LSWebViewNoBar.dart';
 import '../widgets//webview/LSWebViewLocalNoBar.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:dio/dio.dart';
 
 Dio dio = new Dio();
@@ -109,7 +110,23 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   }
 
   void _getMoreTap() {
-    _fetchData();
+    // _fetchData();
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+            return new Container(
+                height: 300.0,
+                child: Center(
+                  child: new QrImage(
+                    data: "1234567890",
+                    size: 200.0,
+                  ),
+                ),
+            );
+        },
+    ).then((val) {
+        print(val);
+    });
     return;
     showDialog<Null>(
       context: context,
@@ -167,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery.of(context).size.width - 40,
                   child: TabBar(
                     labelStyle: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                     unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
@@ -179,19 +196,19 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     controller: _tabController,
                   ),
                 ),
-                // InkWell(
-                //   onTap: _getMoreTap,
-                //   child: Container(
-                //     width: 40,
-                //     decoration: BoxDecoration(
-                //       border: Border(left: BorderSide(color: Color(0x99999999), width: 1)),
-                //     ),
-                //     child: Icon(
-                //       Icons.add,
-                //       color: Color(0x99666666),
-                //     ),
-                //   ),
-                // ),
+                InkWell(
+                  onTap: _getMoreTap,
+                  child: Container(
+                    width: 40,
+                    decoration: BoxDecoration(
+                      border: Border(left: BorderSide(color: Color(0x99999999), width: 1)),
+                    ),
+                    child: Icon(
+                      Icons.add,
+                      color: Color(0x99666666),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
