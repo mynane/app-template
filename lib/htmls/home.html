@@ -33,10 +33,21 @@
         font-size: 12px;
         text-align: center;
       }
+      body {
+        background: red;
+      }
     </style>
+    <script>
+      JSBridge.postMessage(JSON.stringify({
+        "type": "initialization",
+        "data": {
+          headerBgColor: '0xffff0000'
+        }
+      }));
+    </script>
 </head>
 <body>
-    <div class="border tip">欢迎来到开心中文网</div>
+    <div class="border tip" id="nihao">欢迎来到开心中文网</div>
     <div style="text-align:center"> 
       <button onclick="playPause()">播放/暂停</button> 
       <button onclick="makeBig()">放大</button>
@@ -48,13 +59,14 @@
         您的浏览器不支持 HTML5 video 标签。
       </video>
     </div> 
+    
     <script>
       function loading() {
         JSBridge.postMessage(JSON.stringify('{"type": "loading"}'));
       }
-      $(function() {
-        JSBridge.postMessage(JSON.stringify({"type": "changeHeight", "height": `${$(document).height()}`}));
-      })
+      // $(function() {
+      //  JSBridge.postMessage(JSON.stringify({"type": "changeHeight", "height": `${$(document).height()}`}));
+      // })
       var myVideo=document.getElementById("video1"); 
 
           function playPause() { 

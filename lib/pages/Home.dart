@@ -9,6 +9,7 @@ import '../widgets/FloatActionButton.dart';
 import '../widgets//webview/LSWebViewNoBar.dart';
 import '../widgets//webview/LSWebViewLocalNoBar.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+// import 'package:qrcode_reader/QRCodeReader.dart';
 import 'package:dio/dio.dart';
 
 Dio dio = new Dio();
@@ -110,6 +111,15 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   }
 
   void _getMoreTap() {
+    // Future<String> futureString = new QRCodeReader()
+    //            .setAutoFocusIntervalInMs(200) // default 5000
+    //            .setForceAutoFocus(true) // default false
+    //            .setTorchEnabled(true) // default false
+    //            .setHandlePermissions(true) // default true
+    //            .setExecuteAfterPermissionGranted(true) // default true
+    //            .scan();
+    // print(futureString);
+    return;
     // _fetchData();
     showModalBottomSheet(
         context: context,

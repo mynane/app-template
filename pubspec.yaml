@@ -34,8 +34,10 @@ dependencies:
   flutter_downloader: ^1.1.7
   path_provider: ^1.1.0
   flutter_swiper: ^1.1.6
-  qr_flutter: ^1.1.6
-  barcode_scan: ^0.0.3
+  # splashscreen: ^1.2.0
+  qr_flutter:
+    git:
+      url: https://github.com/lukef/qr.flutter.git
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -87,15 +89,9 @@ flutter:
   #         weight: 700
   #
   fonts:
-    - family: MyFlutterApp
+    - family: LS
       fonts:
-        - asset: lib/assets/fonts/MyFlutterApp.ttf #自定义图标
-    - family: MyArrow
-      fonts:
-        - asset: lib/assets/fonts/MyArrow.ttf #自定义图标
-    - family: MyHome
-      fonts:
-        - asset: lib/assets/fonts/MyHome.ttf #自定义图标
+        - asset: lib/assets/fonts/LS.ttf #自定义图标
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
