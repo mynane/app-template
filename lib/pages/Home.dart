@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   void initState() { 
     super.initState();
-    _tabController = new TabController(vsync: this, length: 13);
+    _tabController = new TabController(vsync: this, length: 1);
     _fetchData();
   }
 

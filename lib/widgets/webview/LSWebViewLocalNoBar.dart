@@ -12,7 +12,8 @@ class LSWebViewLocalNoBar extends StatefulWidget {
   final String url;
   final changeHeight;
   final initialization;
-  LSWebViewLocalNoBar({Key key, this.url, this.changeHeight, this.initialization}) : super(key: key);
+  final changeHeader;
+  LSWebViewLocalNoBar({Key key, this.url, this.changeHeight, this.initialization, this.changeHeader}) : super(key: key);
 
   @override
   _LSWebViewLocalNoBarState createState() => _LSWebViewLocalNoBarState();
@@ -176,6 +177,9 @@ class _LSWebViewLocalNoBarState extends State<LSWebViewLocalNoBar> {
               setState(() {
                 title = parsed['data'];
               });
+            break;
+            case 'changeHeader':
+              widget.changeHeader(parsed['data']);
             break;
             case 'loading':
               setState(() {

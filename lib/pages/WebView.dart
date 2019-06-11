@@ -3,7 +3,8 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import '../configs/LS_icons.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../widgets/webview/LSWebViewLocalNoBar.dart';
-
+import '../widgets/common/PositionButton.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 
 class WebViewPage extends StatefulWidget {
@@ -15,19 +16,22 @@ class WebViewPage extends StatefulWidget {
 }
 
 class _WebViewPageState extends State<WebViewPage> {
-  int headerBgColor = 0xffffffff;
+  int bgColor = 0xffffffff;
+  double barHeight = 50;
+  bool isLoading = true;
   void _showModalBottomSheet() {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
           return new Container(
-              height: 300.0,
-              child: Center(
-                child: new QrImage(
-                  data: "1234567890",
-                  size: 200.0,
-                ),
+            height: 200.0,
+            child: Center(
+              child: new QrImage(
+                data: "1234567890",
+                size: 100.0,
               ),
+            ),
+            
           );
         },
     ).then((val) {
@@ -35,83 +39,51 @@ class _WebViewPageState extends State<WebViewPage> {
     });
   }
 
-  Widget _appBar() {
-    return AppBar(
-      title: Text("data"),
-      elevation: 0,
-      centerTitle: true,
-      backgroundColor: Color(this.headerBgColor),
-      actions: <Widget>[
-        Container(
-          padding: EdgeInsets.only(right: 10),
-          child: Center(
-            child: Container(
-              width: 100,
-              height: 40,
-              decoration: BoxDecoration(
-                // color: Colors.red,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Color(0xfff3f3f3), width: 1)
-              ),
-              child: Flex(
-                direction: Axis.horizontal,
-                children: <Widget>[
-                  Expanded(
-                    child: Center(
-                      child: InkWell(
-                        onTap: () {
-                          _showModalBottomSheet();
-                        },
-                        child: Icon(LS.ellipsis, color: Color(0xff333333)),
-                      )
-                    )
-                  ),
-                  Container(
-                    width: 1,
-                    height: 22,
-                    color: Color(0xffe2e2e2),
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Icon(LS.icon_quanquan, color: Color(0xff333333)),
-                      )
-                    )
-                  )
-                ],
-              )
-            ),
-          ),
-        )
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.transparent,
+      color: Colors.white,
       child: Scaffold(
-        appBar: _appBar(),
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          color: Colors.blue,
-          child: LSWebViewLocalNoBar(
-            url: 'lib/htmls/home.html',
-            initialization: (data) {
-              setState(() {
-                print(data["headerBgColor"]);
-                headerBgColor = int.parse(data["headerBgColor"]);
-              });
-              print(data);
-            },
-          ),
+        body: Stack(
+          children: <Widget>[
+            Container(
+              color: Colors.white,
+              child: SafeArea(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  padding: EdgeInsets.only(top: isLoading ? 0 : barHeight),
+                  child: LSWebViewLocalNoBar(
+                    url: 'lib/htmls/home.html',
+                    changeHeader: (isLoad) {
+                      setState(() {
+                        isLoading = isLoad == 'true';
+                      });
+                      print(isLoad);
+                    },
+                    initialization: (data) {
+                      setState(() {
+                        bgColor = int.parse(data["bgColor"]);
+                      });
+                      print(data);
+                    },
+                  ),
+                ),
+              ),
+            ),
+            PositionButton(
+              isLoading: isLoading,
+              barHeight: barHeight,
+              onLeftTap: _showModalBottomSheet,
+              onRightTap: () {
+                Navigator.of(context).pop();
+              },
+              lChild: Icon(LS.ellipsis, color: isLoading ? Color.fromRGBO(4, 4, 4, 1) : Color.fromRGBO(251, 252, 248, 1.00)),
+              rChild: Icon(LS.icon_quanquan, size: 30, color: isLoading ? Color.fromRGBO(4, 4, 4, 1) : Color.fromRGBO(251, 252, 248, 1.00)),
+            ),
+          ],
         ),
-      ),
+      )
     );
   }
 }
